@@ -1,0 +1,88 @@
+STOP_MAP = {
+    '106': {
+        0: {
+            1: 'Wellington', 2: 'Santilli Circle', 3: 'Main St @ Elmwood St', 4: 'Main St @ Oakes St',
+            5: 'Main St @ Winthrop St', 6: 'Main St @ Baldwin Ave', 7: 'Main St @ Clark St',
+            8: 'Main St @ Dyer Ave', 9: 'Main St @ Bradford St', 10: 'Main St @ Belmont St',
+            11: 'Main St @ Clarendon St', 12: 'Main St @ Cross St', 13: 'Main St @ Wilson Ave',
+            14: 'Main St @ Newhall St', 15: 'Main St @ Eastern Ave', 16: 'Centre St @ Jackson St',
+            17: 'Malden Center', 18: 'Centre St @ Stop & Shop', 19: 'Main St opp Pleasant St',
+            20: 'Salem St opp Sprague St', 21: 'Salem St @ Richardson St', 22: 'Salem St @ Salem Pl',
+            23: 'Salem St @ Harding Ave', 24: 'Salem St @ Cross St', 25: 'Salem St @ Dell St',
+            26: 'Salem St @ Branch St', 27: '627 Salem St', 28: 'Lebanon St @ Salem St',
+            29: 'Lebanon St @ Granite St', 30: 'Lebanon St @ Valley St', 31: 'Lebanon St @ Marshall Ave',
+            32: 'Lebanon St Loop'
+        },
+        1: {
+            1: 'Lebanon St Loop', 2: 'Lebanon St @ Bratley St', 3: 'Lebanon St @ Forest St',
+            4: 'Sylvan St @ Kimball St', 5: 'Sylvan St @ Blantyre Rd', 6: 'Sylvan St @ Gilbert St',
+            7: 'Sylvan St @ Lebanon St', 8: 'Lebanon St @ Cherry St', 9: 'Lebanon St @ Orchard St',
+            10: 'Lebanon St @ Salem St', 11: 'Salem St @ Rockwell St', 12: 'Salem St opp Dell St',
+            13: 'Salem St @ Granville Ave', 14: 'Salem St @ Pierce St', 15: 'Salem St @ Wolcott St',
+            16: 'Salem St @ Tremont St', 17: 'Salem St @ Park St', 18: 'Centre St @ Jackson St',
+            19: 'Malden Center', 20: 'Centre St @ Stop & Shop', 21: '310 Main St',
+            22: 'Main St @ Madison St', 23: 'Main St @ Brown Terr', 24: 'Main St @ Wigglesworth St',
+            25: 'Main St @ Converse Ave', 26: 'Main St @ Wyllis Ave', 27: 'Main St @ Floyd St',
+            28: 'Main St @ Everett St', 29: 'Main St @ Prescott St', 30: 'Main St @ Baldwin Ave',
+            31: '202 Main St', 32: 'Main St @ Tileston St', 33: 'Main St @ West St', 34: 'Santilli Circle',
+            35: 'Corporation Way', 36: 'Wellington'
+        }
+    },
+    '99': {
+        0: {
+            1: 'Wellington', 2: 'Gateway Center opp Texas Roadhouse', 3: 'Gateway Center @ Target',
+            4: 'Santilli Circle',
+            5: 'Main St @ Elmwood St', 6: 'Main St @ Oakes St', 7: 'Main St @ Winthrop St', 8: 'Main St @ Baldwin Ave',
+            9: 'Main St @ Clark St', 10: 'Main St @ Dyer Ave', 11: 'Main St @ Bradford St', 12: 'Main St @ Belmont St',
+            13: 'Main St @ Clarendon St', 14: 'Main St @ Cross St', 15: 'Main St @ Wilson Ave',
+            16: 'Main St @ Newhall St',
+            17: 'Main St @ Eastern Ave', 18: 'Main St @ Centre St', 19: 'Main St opp Pleasant St',
+            20: 'Main St @ Salem St',
+            21: 'Florence St @ Ramsdell Rd', 22: 'Florence St @ Washington St', 23: 'Malden Center',
+            24: 'Summer St @ Lincoln St', 25: 'Summer St @ Clifton St', 26: 'Clifton St @ Kernwood St',
+            27: 'Clifton St @ Dexter St', 28: 'Clifton St @ Highland Ave', 29: 'Savin St @ Fellsway E',
+            30: 'Savin St @ Fellsmere Rd', 31: 'Hospital Rd @ Savin St', 32: 'Savin St @ Fellsmere Rd',
+            33: 'Savin St @ Fellsway E', 34: '617 Highland Ave', 35: 'Highland Ave @ Glenwood St',
+            36: 'Highland Ave @ Circle Rd', 37: 'Highland Ave @ McCormack St', 38: 'Highland Ave @ Blomerth St',
+            39: 'Highland Ave @ Tucker St', 40: 'Highland Ave @ E Border Rd', 41: 'Highland Ave @ Molyneaux Circle',
+            42: '3 Woodland Rd'
+        },
+        1: {
+            1: '3 Woodland Rd', 2: 'Highland Ave @ Sturges St', 3: 'Highland Ave @ Waddell St',
+            4: 'Highland Ave @ Rita Dr',
+            5: 'Highland Ave @ Pamela Circle', 6: 'Highland Ave opp Circle Rd', 7: 'Highland Ave @ Wiley St',
+            8: 'Highland Ave @ Pine St', 9: 'Savin St @ Fellsway E', 10: 'Savin St @ Fellsmere Rd',
+            11: 'Hospital Rd @ Savin St', 12: 'Savin St @ Fellsmere Rd', 13: 'Savin St @ Fellsway E',
+            14: 'Clifton St @ Dexter St', 15: 'Clifton St @ Cedar St', 16: 'Summer St @ Clifton St',
+            17: 'Summer St @ Chestnut St', 18: '14 Summer St', 19: 'Malden Center', 20: 'Centre St @ Stop & Shop',
+            21: '310 Main St', 22: 'Main St @ Madison St', 23: 'Main St @ Brown Terr', 24: 'Main St @ Wigglesworth St',
+            25: 'Main St @ Converse Ave', 26: 'Main St @ Wyllis Ave', 27: 'Main St @ Floyd St',
+            28: 'Main St @ Everett St',
+            29: 'Main St @ Prescott St', 30: 'Main St @ Baldwin Ave', 31: '202 Main St', 32: 'Main St @ Tileston St',
+            33: 'Main St @ West St', 34: 'Santilli Circle', 35: 'Gateway Center opp Texas Roadhouse',
+            36: 'Gateway Center @ Target', 37: 'Corporation Way', 38: 'Wellington'
+        }
+    },
+    '97': {
+        0: {
+            1: 'Wellington', 2: 'Gateway Center opp Texas Roadhouse', 3: 'Gateway Center @ Target',
+            4: 'Santilli Circle',
+            5: 'Broadway @ Gladstone St', 6: 'Broadway @ Everett Sq', 7: 'Broadway @ Mansfield St',
+            8: 'Broadway @ High St',
+            9: 'Hancock St @ Glendale Rd', 10: 'Hancock St @ Central Ave', 11: 'Hancock St @ Belmont St',
+            12: '62 Belmont St opp Kinsman St', 13: 'Belmont St @ Main St', 14: 'Main St @ Clarendon St',
+            15: 'Medford St @ Main St', 16: 'Medford St @ Brackenbury St', 17: 'Medford St @ Green St',
+            18: 'Commercial St @ Medford St', 19: 'Commercial St @ Charles St', 20: 'Malden Center'
+        },
+        1: {
+            1: 'Malden Center', 2: 'Commercial St @ Charles St', 3: 'Commercial St @ Medford St',
+            4: 'Medford St @ Green St', 5: 'Medford St @ Brackenbury St', 6: 'Medford St @ Main St',
+            7: 'Main St @ Converse Ave', 8: 'Belmont St @ Main St', 9: 'Belmont St @ Kinsman St',
+            10: 'Hancock St @ Belmont St', 11: 'Hancock St @ Tappan St', 12: 'Hancock St @ Dean St',
+            13: 'Broadway @ Maple Ave', 14: 'Broadway @ Church St', 15: 'Broadway @ Norwood St',
+            16: 'Broadway opp Second St', 17: 'Broadway @ Gladstone St', 18: 'Santilli Circle',
+            19: 'Gateway Center opp Texas Roadhouse', 20: 'Gateway Center @ Target', 21: 'Corporation Way',
+            22: 'Wellington'
+        }
+    }
+}
