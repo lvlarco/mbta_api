@@ -1,7 +1,6 @@
 import requests
-import json
 from datetime import datetime
-from typing import List, Dict, Optional
+from typing import List, Dict
 
 
 class Train:
@@ -39,7 +38,7 @@ class Train:
     def get_direction(self) -> str:
         """
         Maps direction_id to a human-readable string.
-        Note: 0 is generally Outbound and 1 is Inbound for subway, 
+        Note: 0 is generally Outbound and 1 is Inbound for subway,
         but this can vary by specific route definition.
         """
         return "Outbound (0)" if self.direction_id == 0 else "Inbound (1)"
@@ -52,11 +51,12 @@ class MBTAClient:
     """
     Client to handle connection to the MBTA V3 API.
     """
+
     BASE_URL = "https://api-v3.mbta.com"
 
     def __init__(self, api_key: str = None):
         """
-        Initialize with an optional API key. 
+        Initialize with an optional API key.
         (MBTA allows limited requests without a key, but a key is recommended).
         """
         self.api_key = api_key
@@ -76,11 +76,19 @@ class MBTAClient:
 
         # Default to all major subway lines if no specific lines requested
         if not lines:
-            lines = ["Red", "Orange", "Blue", "Green-B", "Green-C", "Green-D", "Green-E"]
+            lines = [
+                "Red",
+                "Orange",
+                "Blue",
+                "Green-B",
+                "Green-C",
+                "Green-D",
+                "Green-E",
+            ]
 
         params = {
             "filter[route]": ",".join(lines),
-            "include": "route"  # Include route data to ensure we have IDs
+            "include": "route",  # Include route data to ensure we have IDs
         }
 
         try:
@@ -107,13 +115,7 @@ class TrainMap:
         """
         Internal method to classify trains by Line Color.
         """
-        color_map = {
-            "Red": [],
-            "Orange": [],
-            "Blue": [],
-            "Green": [],
-            "Other": []
-        }
+        color_map = {"Red": [], "Orange": [], "Blue": [], "Green": [], "Other": []}
 
         for train in self.trains:
             rid = train.route_id
@@ -139,15 +141,17 @@ class TrainMap:
         for color, train_list in self.grouped_data.items():
             result_map[color] = []
             for train in train_list:
-                result_map[color].append({
-                    "id": train.id,
-                    "label": train.label,
-                    "coordinates": train.get_coordinates(),
-                    "bearing": train.bearing,
-                    "status": train.current_status,
-                    "direction": train.get_direction(),
-                    "specific_route": train.route_id
-                })
+                result_map[color].append(
+                    {
+                        "id": train.id,
+                        "label": train.label,
+                        "coordinates": train.get_coordinates(),
+                        "bearing": train.bearing,
+                        "status": train.current_status,
+                        "direction": train.get_direction(),
+                        "specific_route": train.route_id,
+                    }
+                )
         return result_map
 
     def print_status_board(self):
@@ -176,4 +180,3 @@ if __name__ == "__main__":
     train_map.print_status_board()
 
     data_map = train_map.get_map()
-    # print(data_map['Red']) # Example: Access only Red line data
