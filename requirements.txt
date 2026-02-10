@@ -1,2 +1,5 @@
 requests>=2.32.0
 iso8601>=2.1.0
+dash>=4.0.0
+dash-leaflet>=1.0.0
+polyline>=2.0.0
