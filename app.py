@@ -3,6 +3,7 @@ from dash import html, dcc
 import dash_leaflet as dl
 from dash.dependencies import Input, Output
 
+from resources.time_distances import HOME_DETAILS
 from resources.routes_data import ROUTES_DETAILS
 from resources.api_keys import MBTA_API_KEY_V3
 from src.commute_optimizer import CommuteOptimizer
@@ -42,20 +43,20 @@ app.layout = html.Div([
         dl.Map([
             dl.TileLayer(url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"),
             dl.LayerGroup(id="route-path-layer"),
-            dl.Marker(position=[42.415158, -71.067861], icon=home_icon),
+            dl.Marker(position=HOME_DETAILS.get("coords"), icon=home_icon),
             dl.Marker(position=[42.426715, -71.074349], icon=malden_icon, zIndexOffset=-1000),
             dl.Marker(position=[42.401907, -71.077096], icon=wellington_icon, zIndexOffset=-1000),
 
             dl.LayerGroup(id="bus-layer"),
         ],
             id="map",
-            style={"width": "100%", "height": "100%"},  # Let CSS control the size
-            center=[42.415158, -71.067861],
+            style={"width": "100%", "height": "100%"},
+            center=HOME_DETAILS.get("map_centering"),
             zoom=14, zoomControl=True, attributionControl=False,
         )
-    ], className="map-panel")  # <--- CHANGED: Uses CSS class now
+    ], className="map-panel")
 
-], className="main-container")  # <--- CHANGED: Uses CSS class now
+], className="main-container")
 
 com_opt = CommuteOptimizer(MBTA_API_KEY_V3)
 
