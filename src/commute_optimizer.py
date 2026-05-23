@@ -56,7 +56,8 @@ class CommuteOptimizer:
             ("Malden Center", self.WALK_TO_MALDEN_STATION, ol_malden),
             ("Wellington", self.WALK_TO_WELLINGTON_STATION, ol_wellington),
         ]:
-            if not trains: continue
+            if not trains:
+                continue
             for train in trains:
                 wait_time = self._get_minutes_until(train["time"])
                 if wait_time > (walk_time + self.SAFETY_BUFFER):
@@ -88,9 +89,16 @@ class CommuteOptimizer:
                 for bus in bus_preds:
                     curr_seq = bus.get("current_seq")
                     home_seq = self.HOME_SEQUENCES[route_id][target_key]
+                    vehicle_direction = bus.get("direction_id")
+                    expected_direction = data["dir"]
 
                     if curr_seq and home_seq:
-                        stops_away = home_seq - curr_seq
+                        if vehicle_direction == expected_direction:
+                            stops_away = home_seq - curr_seq
+                        else:
+                            current_map = self.master_stop_maps[route_id][vehicle_direction]
+                            stops_to_terminal = len(current_map) - curr_seq
+                            stops_away = stops_to_terminal + home_seq
                         if stops_away > 0:
                             status_str = f"{stops_away} stops away ({bus['location']})"
                         else:
@@ -112,8 +120,9 @@ class CommuteOptimizer:
                         if trains:
                             for train in trains:
                                 train_wait = self._get_minutes_until(train["time"])
-                                print(train_wait)
-                                if train_wait > (arrival_at_station + self.SAFETY_BUFFER):
+                                if train_wait > (
+                                    arrival_at_station + self.SAFETY_BUFFER
+                                ):
                                     best_train_wait = train_wait
                                     break
 
@@ -121,19 +130,23 @@ class CommuteOptimizer:
                             best_train_wait = arrival_at_station + 1
                             status_str += " (Est. Connection)"
 
-                        options.append({
-                            "desc": f"Bus {route_id} -> {target_name}",
-                            "leave_in": bus_wait - self.WALK_TO_BUS_STOPS - self.SAFETY_BUFFER,
-                            "arrival_on_train": best_train_wait,
-                            "status": status_str,
-                            "route_type": "Bus",
-                            "lat": bus.get('lat'),
-                            "lon": bus.get('lon'),
-                            "vehicle_id": bus.get('id'),
-                            "route_id": route_id,
-                            "bus_data": bus,
-                            "direction_id": bus.get('direction_id')
-                        })
+                        options.append(
+                            {
+                                "desc": f"Bus {route_id} -> {target_name}",
+                                "leave_in": bus_wait
+                                - self.WALK_TO_BUS_STOPS
+                                - self.SAFETY_BUFFER,
+                                "arrival_on_train": best_train_wait,
+                                "status": status_str,
+                                "route_type": "Bus",
+                                "lat": bus.get("lat"),
+                                "lon": bus.get("lon"),
+                                "vehicle_id": bus.get("id"),
+                                "route_id": route_id,
+                                "bus_data": bus,
+                                "direction_id": bus.get("direction_id"),
+                            }
+                        )
                         break
 
         options.sort(key=lambda x: x["arrival_on_train"])
@@ -172,12 +185,9 @@ def run_loop() -> None:
                     print(f"   STATUS:   {opt['status']}")
                     print(f"   On Orange Line in: {round(opt['arrival_on_train'])} min")
 
-            print(f"\n{'=' * 55}")
-            print(" Refreshing in 60 seconds... (Ctrl+C to stop)")
             time.sleep(60)
 
         except KeyboardInterrupt:
-            print("\nTracker stopped. safe travels!")
             break
         except Exception as e:
             print(f"\nAn error occurred: {e}")

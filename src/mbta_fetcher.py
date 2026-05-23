@@ -50,7 +50,7 @@ class MBTAFetcher:
         endpoint = f"{self.BASE_URL}/shapes"
         params = {
             "filter[route]": route_id,
-            "sort": "-length"  # Optional: tries to get the longest one first
+            "sort": "-length",  # Optional: tries to get the longest one first
         }
 
         try:
@@ -119,7 +119,9 @@ class MBTAFetcher:
             return []
 
     @staticmethod
-    def _parse_predictions(data: List[Dict], included_map: Dict, stop_map: Dict = None) -> List[Dict]:
+    def _parse_predictions(
+        data: List[Dict], included_map: Dict, stop_map: Dict = None
+    ) -> List[Dict]:
         clean_results = []
         for item in data:
             attrs = item.get("attributes", {})
@@ -131,12 +133,14 @@ class MBTAFetcher:
             direction_id = None
 
             if vehicle_rel:
-                veh = included_map.get(("vehicle", vehicle_rel['id']))
+                veh = included_map.get(("vehicle", vehicle_rel["id"]))
                 if veh:
                     v_attrs = veh.get("attributes", {})
                     lat = v_attrs.get("latitude")
                     lon = v_attrs.get("longitude")
-                    direction_id = v_attrs.get("direction_id")  # <--- NEW: Get the real direction (0 or 1)
+                    direction_id = v_attrs.get(
+                        "direction_id"
+                    )  # <--- NEW: Get the real direction (0 or 1)
 
                     status = v_attrs.get("current_status", "").replace("_", " ").title()
                     current_seq = v_attrs.get("current_stop_sequence")
@@ -147,13 +151,15 @@ class MBTAFetcher:
 
                     location_desc = f"{status} {stop_name}"
 
-            clean_results.append({
-                "time": attrs.get("arrival_time") or attrs.get("departure_time"),
-                "location": location_desc,
-                "current_seq": current_seq,
-                "lat": lat,
-                "lon": lon,
-                "direction_id": direction_id,
-                "id": vehicle_rel['id'] if vehicle_rel else "Unknown"
-            })
+            clean_results.append(
+                {
+                    "time": attrs.get("arrival_time") or attrs.get("departure_time"),
+                    "location": location_desc,
+                    "current_seq": current_seq,
+                    "lat": lat,
+                    "lon": lon,
+                    "direction_id": direction_id,
+                    "id": vehicle_rel["id"] if vehicle_rel else "Unknown",
+                }
+            )
         return clean_results

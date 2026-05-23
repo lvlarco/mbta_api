@@ -15,10 +15,13 @@ TEXT_STYLE = {
 }
 
 home_icon = dict(iconUrl="/assets/home.png", iconSize=[60, 60], iconAnchor=[30, 60])
+malden_icon = dict(iconUrl="/assets/malden.png", iconSize=[60, 60], iconAnchor=[30, 60])
+wellington_icon = dict(iconUrl="/assets/wellington.png", iconSize=[60, 60], iconAnchor=[30, 60])
 
-# ... imports remain the same ...
-
-app = dash.Dash(__name__)
+app = dash.Dash(__name__, title="GoTime", meta_tags=[
+    {"name": "mobile-web-app-capable", "content": "yes"},
+    {"name": "application-name", "content": "GoTime"},
+])
 
 app.layout = html.Div([
     dcc.Interval(id="interval-component", interval=15 * 1000, n_intervals=0),
@@ -27,7 +30,7 @@ app.layout = html.Div([
     html.Div([
         html.Div(id="primary-option-container", children=[
             html.Div("LEAVE IN", style={**TEXT_STYLE, "fontSize": "25px", "color": "#666"}),
-            html.Div(id="primary-timer", style={**TEXT_STYLE, "fontSize": "130px", "lineHeight": "1.0"}),
+            html.Div(id="primary-timer", style={**TEXT_STYLE, "fontSize": "100px", "lineHeight": "1.0"}),
             html.Div(id="primary-desc", style={**TEXT_STYLE, "fontSize": "30px", "marginTop": "10px"}),
         ], style={"padding": "30px", "borderBottom": "4px solid #eee"}),
 
@@ -39,12 +42,16 @@ app.layout = html.Div([
         dl.Map([
             dl.TileLayer(url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"),
             dl.LayerGroup(id="route-path-layer"),
-            dl.Marker(icon=home_icon),
+            dl.Marker(position=[42.415158, -71.067861], icon=home_icon),
+            dl.Marker(position=[42.426715, -71.074349], icon=malden_icon, zIndexOffset=-1000),
+            dl.Marker(position=[42.401907, -71.077096], icon=wellington_icon, zIndexOffset=-1000),
+
             dl.LayerGroup(id="bus-layer"),
         ],
             id="map",
             style={"width": "100%", "height": "100%"},  # Let CSS control the size
-            zoom=15, zoomControl=False, attributionControl=False,
+            center=[42.415158, -71.067861],
+            zoom=14, zoomControl=True, attributionControl=False,
         )
     ], className="map-panel")  # <--- CHANGED: Uses CSS class now
 
@@ -94,6 +101,15 @@ def refresh_ui(n):
     # Track which routes we've already drawn to avoid overlap mess
     drawn_routes = set()
 
+    # Gets top route icon
+    top_route_id = top.get("route_id")
+    if top_route_id:
+        top_icon_url = get_bus_icon(top_route_id)["iconUrl"]
+    elif top.get("route_type") == "Walking":
+        top_icon_url = "/assets/walk.png"
+    else:
+        top_icon_url = None  # truly unknown/empty
+
     # Process top 4 results
     # We use .get() to avoid the KeyError if a field is missing
     for i, opt in enumerate(results[:4]):
@@ -102,6 +118,7 @@ def refresh_ui(n):
             continue  # Skip if no route ID exists (like walking)
 
         # A. Sidebar Card
+        route_color = ROUTES_DETAILS.get(r_id, {}).get("color", "#ccc") if r_id else "#ccc"
         card = html.Div(
             [
                 html.Div(
@@ -123,7 +140,7 @@ def refresh_ui(n):
             ],
             style={
                 "padding": "20px",
-                "borderLeft": f'15px solid {opt.get("color", "#ccc")}',
+                "borderLeft": f'15px solid {route_color}',
                 "backgroundColor": "#f9f9f9" if i == 0 else "#fff",
                 "borderBottom": "1px solid #ddd",
             },
@@ -152,13 +169,18 @@ def refresh_ui(n):
                     position=[opt["lat"], opt["lon"]],
                     icon=get_bus_icon(r_id),
                     children=[dl.Tooltip(f"Route {r_id}")],
+                    zIndexOffset=1000,
                 )
             )
 
     return (
         f"{leave_min} MIN",
-        {**TEXT_STYLE, "fontSize": "130px", "color": timer_color},
-        top.get("desc", "Unknown").upper(),
+        {**TEXT_STYLE, "fontSize": "100px", "color": timer_color},
+        html.Div([
+            html.Img(src=top_icon_url, style={"height": "70px", "marginRight": "15px",
+                                              "verticalAlign": "middle"}) if top_icon_url else None,
+            html.Span(top.get("desc", "Unknown").upper()),
+        ], style={"display": "flex", "alignItems": "center"}),
         secondary_cards,
         bus_markers,
         path_layer,
@@ -166,4 +188,6 @@ def refresh_ui(n):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=8050)
+    local = "127.0.0.1"
+    network = "0.0.0.0"
+    app.run(debug=False, host=network, port=8050)

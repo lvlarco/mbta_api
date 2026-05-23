@@ -1,0 +1,13 @@
+{
+    "name": "GoTime",
+    "short_name": "GoTime",
+    "icons": [
+        {
+            "src": "/assets/favicon.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ],
+    "start_url": "/",
+    "display": "standalone"
+}
