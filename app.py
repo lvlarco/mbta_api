@@ -36,7 +36,7 @@ app.layout = html.Div([
         ], style={"padding": "30px", "borderBottom": "4px solid #eee"}),
 
         html.Div(id="secondary-options-list", style={**TEXT_STYLE, "flex": "1", "overflowY": "auto"}),
-    ], className="dashboard-panel"),  # <--- CHANGED: Uses CSS class now
+    ], className="dashboard-panel"),
 
     # RIGHT PANEL: MAP
     html.Div([
@@ -52,7 +52,7 @@ app.layout = html.Div([
             id="map",
             style={"width": "100%", "height": "100%"},
             center=HOME_DETAILS.get("map_centering"),
-            zoom=14, zoomControl=True, attributionControl=False,
+            zoom=14, zoomControl=False, attributionControl=False,
         )
     ], className="map-panel")
 
