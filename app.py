@@ -17,46 +17,93 @@ TEXT_STYLE = {
 
 home_icon = dict(iconUrl="/assets/home.png", iconSize=[60, 60], iconAnchor=[30, 60])
 malden_icon = dict(iconUrl="/assets/malden.png", iconSize=[60, 60], iconAnchor=[30, 60])
-wellington_icon = dict(iconUrl="/assets/wellington.png", iconSize=[60, 60], iconAnchor=[30, 60])
+wellington_icon = dict(
+    iconUrl="/assets/wellington.png", iconSize=[60, 60], iconAnchor=[30, 60]
+)
 
-app = dash.Dash(__name__, title="GoTime", meta_tags=[
-    {"name": "mobile-web-app-capable", "content": "yes"},
-    {"name": "application-name", "content": "GoTime"},
-])
+app = dash.Dash(
+    __name__,
+    title="GoTime",
+    meta_tags=[
+        {"name": "mobile-web-app-capable", "content": "yes"},
+        {"name": "application-name", "content": "GoTime"},
+    ],
+)
 
-app.layout = html.Div([
-    dcc.Interval(id="interval-component", interval=15 * 1000, n_intervals=0),
-
-    # LEFT PANEL: DASHBOARD
-    html.Div([
-        html.Div(id="primary-option-container", children=[
-            html.Div("LEAVE IN", style={**TEXT_STYLE, "fontSize": "25px", "color": "#666"}),
-            html.Div(id="primary-timer", style={**TEXT_STYLE, "fontSize": "100px", "lineHeight": "1.0"}),
-            html.Div(id="primary-desc", style={**TEXT_STYLE, "fontSize": "30px", "marginTop": "10px"}),
-        ], style={"padding": "30px", "borderBottom": "4px solid #eee"}),
-
-        html.Div(id="secondary-options-list", style={**TEXT_STYLE, "flex": "1", "overflowY": "auto"}),
-    ], className="dashboard-panel"),
-
-    # RIGHT PANEL: MAP
-    html.Div([
-        dl.Map([
-            dl.TileLayer(url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"),
-            dl.LayerGroup(id="route-path-layer"),
-            dl.Marker(position=HOME_DETAILS.get("coords"), icon=home_icon),
-            dl.Marker(position=[42.426715, -71.074349], icon=malden_icon, zIndexOffset=-1000),
-            dl.Marker(position=[42.401907, -71.077096], icon=wellington_icon, zIndexOffset=-1000),
-
-            dl.LayerGroup(id="bus-layer"),
-        ],
-            id="map",
-            style={"width": "100%", "height": "100%"},
-            center=HOME_DETAILS.get("map_centering"),
-            zoom=14, zoomControl=False, attributionControl=False,
-        )
-    ], className="map-panel")
-
-], className="main-container")
+app.layout = html.Div(
+    [
+        dcc.Interval(id="interval-component", interval=15 * 1000, n_intervals=0),
+        # LEFT PANEL: DASHBOARD
+        html.Div(
+            [
+                html.Div(
+                    id="primary-option-container",
+                    children=[
+                        html.Div(
+                            "LEAVE IN",
+                            style={**TEXT_STYLE, "fontSize": "25px", "color": "#666"},
+                        ),
+                        html.Div(
+                            id="primary-timer",
+                            style={
+                                **TEXT_STYLE,
+                                "fontSize": "100px",
+                                "lineHeight": "1.0",
+                            },
+                        ),
+                        html.Div(
+                            id="primary-desc",
+                            style={
+                                **TEXT_STYLE,
+                                "fontSize": "30px",
+                                "marginTop": "10px",
+                            },
+                        ),
+                    ],
+                    style={"padding": "30px", "borderBottom": "4px solid #eee"},
+                ),
+                html.Div(
+                    id="secondary-options-list",
+                    style={**TEXT_STYLE, "flex": "1", "overflowY": "auto"},
+                ),
+            ],
+            className="dashboard-panel",
+        ),
+        # RIGHT PANEL: MAP
+        html.Div(
+            [
+                dl.Map(
+                    [
+                        dl.TileLayer(
+                            url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+                        ),
+                        dl.LayerGroup(id="route-path-layer"),
+                        dl.Marker(position=HOME_DETAILS.get("coords"), icon=home_icon),
+                        dl.Marker(
+                            position=[42.426715, -71.074349],
+                            icon=malden_icon,
+                            zIndexOffset=-1000,
+                        ),
+                        dl.Marker(
+                            position=[42.401907, -71.077096],
+                            icon=wellington_icon,
+                            zIndexOffset=-1000,
+                        ),
+                        dl.LayerGroup(id="bus-layer"),
+                    ],
+                    id="map",
+                    style={"width": "100%", "height": "100%"},
+                    center=HOME_DETAILS.get("map_centering"),
+                    zoom=14,
+                    zoomControl=False,
+                    attributionControl=False,
+                )
+            ],
+            className="map-panel",
+        ),
+    ],
+    className="main-container",
+)
 
 com_opt = CommuteOptimizer(MBTA_API_KEY_V3)
 
@@ -119,7 +166,9 @@ def refresh_ui(n):
             continue  # Skip if no route ID exists (like walking)
 
         # A. Sidebar Card
-        route_color = ROUTES_DETAILS.get(r_id, {}).get("color", "#ccc") if r_id else "#ccc"
+        route_color = (
+            ROUTES_DETAILS.get(r_id, {}).get("color", "#ccc") if r_id else "#ccc"
+        )
         card = html.Div(
             [
                 html.Div(
@@ -141,7 +190,7 @@ def refresh_ui(n):
             ],
             style={
                 "padding": "20px",
-                "borderLeft": f'15px solid {route_color}',
+                "borderLeft": f"15px solid {route_color}",
                 "backgroundColor": "#f9f9f9" if i == 0 else "#fff",
                 "borderBottom": "1px solid #ddd",
             },
@@ -177,11 +226,24 @@ def refresh_ui(n):
     return (
         f"{leave_min} MIN",
         {**TEXT_STYLE, "fontSize": "100px", "color": timer_color},
-        html.Div([
-            html.Img(src=top_icon_url, style={"height": "70px", "marginRight": "15px",
-                                              "verticalAlign": "middle"}) if top_icon_url else None,
-            html.Span(top.get("desc", "Unknown").upper()),
-        ], style={"display": "flex", "alignItems": "center"}),
+        html.Div(
+            [
+                (
+                    html.Img(
+                        src=top_icon_url,
+                        style={
+                            "height": "70px",
+                            "marginRight": "15px",
+                            "verticalAlign": "middle",
+                        },
+                    )
+                    if top_icon_url
+                    else None
+                ),
+                html.Span(top.get("desc", "Unknown").upper()),
+            ],
+            style={"display": "flex", "alignItems": "center"},
+        ),
         secondary_cards,
         bus_markers,
         path_layer,
